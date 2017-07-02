@@ -16,44 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var app = {
-    // Application Constructor
-    initialize: function () {
-        alert('test');
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function () {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function () {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function (id) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://api.github.com/legacy/repos/search/javascript', true);
-        // Response handlers.
-        xhr.onload = function () {
-            var repos = JSON.parse(xhr.response),
-                i, reposHTML = "";
-            for (i = 0; i < repos.repositories.length; i++) {
-                reposHTML += "<p><a href='https://github.com/" + repos.repositories[i].username + "/" + repos.repositories[i].name + "'>" + repos.repositories[i].name + "</a><br>" + repos.repositories[i].description + "</p>";
-            }
-            document.getElementById("allRepos").innerHTML = reposHTML;
-        }
+$('#reposHome').bind('pageinit', function (event) {
+    loadRepos();
+})
 
-        xhr.onerror = function () {
-            alert('error making the request');
-        };
-
-        xhr.send();
-    }
-};
+function loadRepos() {
+    $.ajax("https://api.github.com/legacy/repos/search/javascript").done(function (data) {
+        var i, repo;
+        $.each(data.repositories, function (i, repo) {
+            $("#allRepos").append("<li><a href='https://github.com/" + repo.username + "/" + repo.name + "'>" +
+                "<h4>" + repo.name + "</h4>" +
+                "<p>" + repo.username + "</p></a></li>");
+        });
+        $('#allRepos').listview('refresh');
+    });
+}
