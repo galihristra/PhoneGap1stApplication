@@ -24,6 +24,9 @@ $('body').on('pageshow', '#reposDetail', function (event) {
     var owner = getUrlVars().owner;
     var name = getUrlVars().name;
     loadRepoDetail(owner, name);
+    
+    $('#saveBtn').bind("click", saveFave);
+    checkFave();
 });
 
 function loadRepoDetail(owner, name){
@@ -62,4 +65,8 @@ function getUrlVars() {
         vars[hash[0]] = hash[1];
     }
     return vars;
+}
+
+function checkFave(){
+    db.transaction(checkFaveDB, txError);
 }
