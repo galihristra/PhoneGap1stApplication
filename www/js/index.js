@@ -18,6 +18,15 @@
  */
 $('#reposHome').bind('pageinit', function (event) {
     loadRepos();
+    document.addEventListener("backbutton", function(e){
+       if($.mobile.activePage.is('#reposHome')){
+           e.preventDefault();
+           navigator.app.exitApp();
+       }
+       else {
+           navigator.app.backHistory();
+       }
+    }, false);
 });
 
 $('body').on('pageshow', '#reposDetail', function (event) {
@@ -27,6 +36,10 @@ $('body').on('pageshow', '#reposDetail', function (event) {
     
     $('#saveBtn').bind("click", saveFave);
     checkFave();
+});
+
+$('body').on('pageshow', '#favesHome', function (event){
+    db.transaction(loadFavesDB, txError, txSuccess);
 });
 
 function loadRepoDetail(owner, name){
@@ -69,4 +82,8 @@ function getUrlVars() {
 
 function checkFave(){
     db.transaction(checkFaveDB, txError);
+}
+
+function alertDismissed(){
+    $.mobile.changePage("index.html");
 }

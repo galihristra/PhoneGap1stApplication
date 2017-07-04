@@ -59,3 +59,26 @@ function txSuccessCheckFave(tx, results){
     if (results.rows.length)
         disableSaveButton();
 }
+
+function loadFavesDB(tx){
+    tx.executeSql("SELECT * FROM repos", [], txSuccessLoadFaves);
+}
+
+function txSuccessLoadFaves(tx, results){
+    console.log("Read Favs Success.");
+    
+    if(results.rows.length){
+        var len = results.rows.length;
+        var repo;
+        for(var i = 0; i < len; i++){
+            repo = results.rows.item(i);
+            console.log(repo);
+            $('#savedItems').append("<li><a href='repo-detail.html?owner=" + repo.user + "&name=" + repo.name + "'>" + "<h4>" + repo.name + "</h4>" + "<p>" + repo.user + "</p></a></li>");
+        };
+        $('#savedItems').listview('refresh');
+    }
+    else{
+        if(navigator.notification)
+            navigator.notification.alert("Its Empty !", alertDismissed);
+    }
+}
