@@ -24,7 +24,7 @@ function loadRepos() {
     $.ajax("https://api.github.com/legacy/repos/search/javascript").done(function (data) {
         var i, repo;
         $.each(data.repositories, function (i, repo) {
-            $("#allRepos").append("<li><a href='https://github.com/" + repo.username + "/" + repo.name + "'>" +
+            $("#allRepos").append("<li><a href='repo-detail.html?owner=" + repo.username + "&name=" + repo.name + "'>" +
                 "<h4>" + repo.name + "</h4>" +
                 "<p>" + repo.username + "</p></a></li>");
         });
