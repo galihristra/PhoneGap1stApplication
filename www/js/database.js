@@ -6,8 +6,12 @@ $('#reposHome').bind('pageinit', function (event){
 });
 
 function createDB(tx){
-    tx.executeSql("DROP TABLE IF EXISTS repos");
-    tx.executeSql("CREATE TABLE repos(user, name)");
+    tx.executeSql("SELECT name FROM sqlite_master WHERE type='table' AND name='repos'", [], function (tx, result){
+        if(result.rows.length == 0){
+            // if table doesnt exists
+            tx.executeSql("CREATE TABLE repos(user, name)");
+        }
+    })
 };
 
 function txError(Error){
