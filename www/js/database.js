@@ -47,19 +47,24 @@ function txSuccessFave(){
 
 function disableSaveButton() {
     // change button style
-//    var ctx = $('#saveBtn').closest('.ui-btn');
-//    $(ctx).removeClass('ui-alt-icon');
+    var ctx = $('#saveBtn').closest('.ui-btn');
+    $(ctx).removeClass('ui-icon-star');
+    $(ctx).addClass('ui-icon-delete');
     
-    $('#saveBtn').hide();
-    $('#deleteBtn').show();
+    // bind delete button
+    $('#saveBtn').unbind('click', saveFave);
+    $('#saveBtn').bind('click', deleteFave);
 }
 
 function enableSaveButton() {
-//    var ctx = $('#saveBtn').closest('.ui-btn');
-//    $(ctx).removeClass('ui-alt-icon');
+    // change button style
+    var ctx = $('#saveBtn').closest('.ui-btn');
+    $(ctx).removeClass('ui-icon-delete');
+    $(ctx).addClass('ui-icon-star');
     
-    $('#saveBtn').show();
-    $('#deleteBtn').hide();
+    // bind delete button
+    $('#saveBtn').unbind('click', deleteFave);
+    $('#saveBtn').bind('click', saveFave);
 }
 
 function checkFaveDB(tx){
@@ -100,4 +105,26 @@ function txSuccessLoadFaves(tx, results){
         if(navigator.notification)
             navigator.notification.alert("Its Empty !", alertDismissed);
     }
+}
+
+function deleteFave(){
+    navigator.notification.confirm("Delete this Git From Your Saved List?", function(buttonPressed){
+        if (buttonPressed == 1){
+            db = window.openDatabase("repodb", "0.1", "Github Repo DB", 1000);
+            db.transaction(deleteFaveDB, txError, txSuccessDelete);
+        }
+    }, "Confirm", ["Yes, Delete it!", "Cancel"]);
+}
+
+function deleteFaveDB(tx){
+    var owner = getUrlVars().owner;
+    var name = getUrlVars().name;
+    
+    tx.executeSql("DELETE FROM repos WHERE user = ? AND name = ?", [owner, name]);
+}
+
+function txSuccessDelete(){
+    console.log("Deleted !");
+    
+    enableSaveButton();
 }
