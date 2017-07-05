@@ -24,8 +24,12 @@ function txSuccess(){
 }
 
 function saveFave(){
-    db = window.openDatabase("repodb", "0.1", "Github Repo DB", 1000);
-    db.transaction(saveFaveDB, txError, txSuccessFave);
+    navigator.notification.confirm("Save this Git ?", function(buttonPressed){
+        if (buttonPressed == 1){
+            db = window.openDatabase("repodb", "0.1", "Github Repo DB", 1000);
+            db.transaction(saveFaveDB, txError, txSuccessFave);
+        }
+    }, "Confirm", ["Save", "Cancel"]);
 }
 
 function saveFaveDB(tx){
