@@ -21,7 +21,7 @@ $('#reposHome').bind('pageinit', function (event) {
     document.addEventListener("backbutton", function(e){
        if($.mobile.activePage.is('#reposHome')){
            e.preventDefault();
-           navigator.app.exitApp();\
+           navigator.app.exitApp();
        }
        else {
            navigator.app.backHistory();
