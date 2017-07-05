@@ -47,10 +47,19 @@ function txSuccessFave(){
 
 function disableSaveButton() {
     // change button style
-    var ctx = $('#saveBtn').closest('.ui-btn');
-    $(ctx).removeClass('ui-alt-icon');
+//    var ctx = $('#saveBtn').closest('.ui-btn');
+//    $(ctx).removeClass('ui-alt-icon');
     
-    $('#saveBtn').unbind('click', saveFave);
+    $('#saveBtn').hide();
+    $('#deleteBtn').show();
+}
+
+function enableSaveButton() {
+//    var ctx = $('#saveBtn').closest('.ui-btn');
+//    $(ctx).removeClass('ui-alt-icon');
+    
+    $('#saveBtn').show();
+    $('#deleteBtn').hide();
 }
 
 function checkFaveDB(tx){
@@ -66,6 +75,8 @@ function txSuccessCheckFave(tx, results){
     
     if (results.rows.length)
         disableSaveButton();
+    else
+        enableSaveButton();
 }
 
 function loadFavesDB(tx){

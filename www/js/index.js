@@ -34,7 +34,7 @@ $('body').on('pageshow', '#reposDetail', function (event) {
     var name = getUrlVars().name;
     loadRepoDetail(owner, name);
     
-    $('#saveBtn').bind("click", saveFave);
+//    $('#saveBtn').bind("click", saveFave);
     checkFave();
 });
 
